@@ -25,6 +25,15 @@ if (!localStorage.getItem('users')) {
     ]);
 }
 
+// Создаём тестовые заявки если их нет
+if (!localStorage.getItem('requests')) {
+    DB.setRequests([
+        { id: 'req-1', userLogin: 'Admin26', course: 'Повышение квалификации', date: '15.01.2026', payment: 'Оплата картой МИР', status: 'Новая' },
+        { id: 'req-2', userLogin: 'Admin26', course: 'Курс по охране труда', date: '20.02.2026', payment: 'Предоплата по QR-коду', status: 'Идет обучение' },
+        { id: 'req-3', userLogin: 'Admin26', course: 'Курс переподготовки', date: '10.03.2026', payment: 'Постоплата в офисе', status: 'Обучение завершено' },
+    ]);
+}
+
 // ================================================================
 //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 // ================================================================
@@ -173,6 +182,7 @@ document.querySelectorAll('[data-page]').forEach(btn => {
     });
 });
 
+// Админ кнопка в навигации
 document.getElementById('adminNavBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
     if (!user || user.login !== 'Admin26') {
@@ -189,6 +199,48 @@ document.getElementById('backToProfileFromRequest').addEventListener('click', ()
     navigate('page-profile');
     renderProfile();
 });
+
+// ================================================================
+//  ЗВЁЗДЫ ДЛЯ ОТЗЫВОВ
+// ================================================================
+let selectedRating = 0;
+const stars = document.querySelectorAll('.star');
+const ratingText = document.getElementById('ratingText');
+
+stars.forEach(star => {
+    star.addEventListener('click', function() {
+        selectedRating = parseInt(this.dataset.value);
+        updateStars();
+    });
+    star.addEventListener('mouseenter', function() {
+        const val = parseInt(this.dataset.value);
+        stars.forEach(s => {
+            if (parseInt(s.dataset.value) <= val) {
+                s.style.color = '#f5b342';
+            } else {
+                s.style.color = '#ced4da';
+            }
+        });
+    });
+    star.addEventListener('mouseleave', function() {
+        updateStars();
+    });
+});
+
+function updateStars() {
+    stars.forEach(s => {
+        const val = parseInt(s.dataset.value);
+        if (val <= selectedRating) {
+            s.classList.add('active');
+            s.style.color = '#f5b342';
+        } else {
+            s.classList.remove('active');
+            s.style.color = '#ced4da';
+        }
+    });
+    const labels = ['', 'Ужасно', 'Плохо', 'Нормально', 'Хорошо', 'Отлично!'];
+    ratingText.textContent = selectedRating > 0 ? `${selectedRating} ★ — ${labels[selectedRating]}` : 'Выберите оценку';
+}
 
 // ================================================================
 //  СЛАЙДЕР
@@ -257,6 +309,7 @@ function renderProfile() {
         });
     }
 
+    // Обновляем выпадающий список для отзывов
     const select = document.getElementById('reviewRequestSelect');
     select.innerHTML = '<option value="">— выберите завершённую заявку —</option>';
     userRequests.filter(r => r.status === 'Обучение завершено').forEach(r => {
@@ -266,6 +319,13 @@ function renderProfile() {
         select.appendChild(opt);
     });
 
+    // Отображаем отзывы
+    renderReviews();
+}
+
+function renderReviews() {
+    const user = DB.getCurrentUser();
+    if (!user) return;
     const allReviews = DB.getReviews();
     const userReviews = allReviews.filter(r => r.userLogin === user.login);
     const reviewsContainer = document.getElementById('reviewsList');
@@ -276,22 +336,37 @@ function renderProfile() {
         userReviews.forEach(r => {
             const div = document.createElement('div');
             div.className = 'review-item';
-            div.innerHTML = `<strong>${r.course}</strong><br><span class="text-small">${r.text}</span>`;
+            const stars = '★'.repeat(r.rating || 0) + '☆'.repeat(5 - (r.rating || 0));
+            const moodEmojis = { positive: '😊', neutral: '😐', negative: '😞' };
+            div.innerHTML = `
+                <div class="flex-between">
+                    <strong>${r.course}</strong>
+                    <span class="review-stars">${stars}</span>
+                </div>
+                <div>
+                    <span class="review-mood">${moodEmojis[r.mood] || '😊'}</span>
+                    <span class="text-small">${r.text}</span>
+                </div>
+                <div class="text-small" style="color:#999;margin-top:4px;">${r.date || ''}</div>
+            `;
             reviewsContainer.appendChild(div);
         });
     }
 }
 
 // ================================================================
-//  ОТЗЫВЫ
+//  ОТПРАВКА ОТЗЫВА
 // ================================================================
 document.getElementById('submitReviewBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
     if (!user) { showToast('Войдите в систему'); return; }
     const select = document.getElementById('reviewRequestSelect');
     const text = document.getElementById('reviewText').value.trim();
+    const mood = document.getElementById('reviewMood').value;
+    
     if (!select.value) { showToast('Выберите завершённую заявку'); return; }
     if (!text) { showToast('Напишите текст отзыва'); return; }
+    if (selectedRating === 0) { showToast('Поставьте оценку'); return; }
 
     const allRequests = DB.getRequests();
     const request = allRequests.find(r => r.id === select.value);
@@ -302,12 +377,16 @@ document.getElementById('submitReviewBtn').addEventListener('click', function() 
         userLogin: user.login,
         course: request.course,
         text: text,
+        rating: selectedRating,
+        mood: mood,
         date: new Date().toLocaleDateString()
     });
     DB.setReviews(reviews);
-    showToast('Отзыв сохранён!');
+    showToast('Отзыв сохранён! Спасибо!');
     document.getElementById('reviewText').value = '';
-    renderProfile();
+    selectedRating = 0;
+    updateStars();
+    renderReviews();
 });
 
 // ================================================================
@@ -363,8 +442,17 @@ function renderAdmin() {
         filtered = filtered.filter(r => r.status === statusFilter);
     }
     if (searchQuery) {
-        filtered = filtered.filter(r => r.course.toLowerCase().includes(searchQuery));
+        filtered = filtered.filter(r => 
+            r.course.toLowerCase().includes(searchQuery) || 
+            r.userLogin.toLowerCase().includes(searchQuery)
+        );
     }
+
+    // Статистика
+    document.getElementById('statTotal').textContent = allRequests.length;
+    document.getElementById('statNew').textContent = allRequests.filter(r => r.status === 'Новая').length;
+    document.getElementById('statLearning').textContent = allRequests.filter(r => r.status === 'Идет обучение').length;
+    document.getElementById('statDone').textContent = allRequests.filter(r => r.status === 'Обучение завершено').length;
 
     const totalPages = Math.ceil(filtered.length / adminPageSize) || 1;
     if (adminCurrentPage > totalPages) adminCurrentPage = totalPages;
@@ -425,6 +513,14 @@ function renderAdmin() {
         });
     });
 }
+
+// Очистка фильтров
+document.getElementById('adminClearFilters').addEventListener('click', function() {
+    document.getElementById('adminStatusFilter').value = 'all';
+    document.getElementById('adminSearch').value = '';
+    adminCurrentPage = 1;
+    renderAdmin();
+});
 
 document.getElementById('adminStatusFilter').addEventListener('change', () => {
     adminCurrentPage = 1;
