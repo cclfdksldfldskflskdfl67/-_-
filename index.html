@@ -11,7 +11,6 @@
 </head>
 <body>
     <div class="app" id="app">
-        <!-- Toast уведомление -->
         <div class="toast" id="toast"></div>
 
         <!-- ============================================================ -->
@@ -19,7 +18,7 @@
         <!-- ============================================================ -->
         <div class="page active" id="page-register">
             <div class="logo-header">
-                <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img">
+                <img src="./assets/20220922_logo.jpg" alt="Учусь.РФ" class="logo-img">
                 <h1>Учусь.РФ</h1>
             </div>
             <p class="text-small" style="margin-bottom: 16px;">Создайте аккаунт для записи на курсы</p>
@@ -59,7 +58,7 @@
         <!-- ============================================================ -->
         <div class="page" id="page-login">
             <div class="logo-header">
-                <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img">
+                <img src="./assets/20220922_logo.jpg" alt="Учусь.РФ" class="logo-img">
                 <h1>Вход</h1>
             </div>
             <p class="text-small" style="margin-bottom: 16px;">Введите логин и пароль</p>
@@ -85,22 +84,21 @@
         <!-- СТРАНИЦА 3: ЛИЧНЫЙ КАБИНЕТ (ИСПРАВЛЕН) -->
         <!-- ============================================================ -->
         <div class="page" id="page-profile">
-            <!-- Шапка -->
             <div class="flex-between">
                 <div class="logo-header small">
-                    <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img-small">
+                    <img src="./assets/20220922_logo.jpg" alt="Учусь.РФ" class="logo-img">
                     <h2>Личный кабинет</h2>
                 </div>
                 <button class="nav-link logout-btn" id="logoutBtn">Выйти</button>
             </div>
             
-            <!-- ПРОБЛЕМА 1 ИСПРАВЛЕНА: раздельный вывод пользователя -->
+            <!-- ИСПРАВЛЕНО: раздельный вывод пользователя -->
             <div class="user-info">
                 <span class="user-label">Участник</span>
                 <span class="user-name" id="profileUser">Иванов И.И.</span>
             </div>
 
-            <!-- Слайдер с изображениями -->
+            <!-- Слайдер -->
             <div class="slider-container" id="profileSlider">
                 <div class="slider-track" id="sliderTrack">
                     <div class="slider-slide">
@@ -137,7 +135,7 @@
                 <div class="slider-dots" id="sliderDots"></div>
             </div>
 
-            <!-- ПРОБЛЕМА 2 ИСПРАВЛЕНА: блок преимуществ -->
+            <!-- ИСПРАВЛЕНО: блок преимуществ с правильными размерами -->
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <img src="quality.webp" alt="Качество" class="benefit-icon">
@@ -293,7 +291,7 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- НАВИГАЦИОННОЕ МЕНЮ -->
+        <!-- НАВИГАЦИЯ -->
         <!-- ============================================================ -->
         <div class="bottom-nav">
             <button class="nav-btn" data-page="page-profile" id="navProfile">
