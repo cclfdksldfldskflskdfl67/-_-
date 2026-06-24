@@ -14,7 +14,9 @@
         <!-- Toast уведомление -->
         <div class="toast" id="toast"></div>
 
-        <!-- ============ СТРАНИЦА 1: РЕГИСТРАЦИЯ ============ -->
+        <!-- ============================================================ -->
+        <!-- СТРАНИЦА 1: РЕГИСТРАЦИЯ -->
+        <!-- ============================================================ -->
         <div class="page active" id="page-register">
             <div class="logo-header">
                 <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img">
@@ -52,7 +54,9 @@
             <div class="text-small mt-12" style="color:#999;">* Все поля обязательны</div>
         </div>
 
-        <!-- ============ СТРАНИЦА 2: АВТОРИЗАЦИЯ ============ -->
+        <!-- ============================================================ -->
+        <!-- СТРАНИЦА 2: АВТОРИЗАЦИЯ -->
+        <!-- ============================================================ -->
         <div class="page" id="page-login">
             <div class="logo-header">
                 <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img">
@@ -77,8 +81,11 @@
             <div class="text-small mt-12" style="color:#999;">Admin: Admin26 / Demo20</div>
         </div>
 
-        <!-- ============ СТРАНИЦА 3: ЛИЧНЫЙ КАБИНЕТ ============ -->
+        <!-- ============================================================ -->
+        <!-- СТРАНИЦА 3: ЛИЧНЫЙ КАБИНЕТ (ИСПРАВЛЕН) -->
+        <!-- ============================================================ -->
         <div class="page" id="page-profile">
+            <!-- Шапка -->
             <div class="flex-between">
                 <div class="logo-header small">
                     <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img-small">
@@ -86,7 +93,12 @@
                 </div>
                 <button class="nav-link logout-btn" id="logoutBtn">Выйти</button>
             </div>
-            <div id="profileUser" class="text-small" style="margin-bottom:12px;">Иванов И.И.</div>
+            
+            <!-- ПРОБЛЕМА 1 ИСПРАВЛЕНА: раздельный вывод пользователя -->
+            <div class="user-info">
+                <span class="user-label">Участник</span>
+                <span class="user-name" id="profileUser">Иванов И.И.</span>
+            </div>
 
             <!-- Слайдер с изображениями -->
             <div class="slider-container" id="profileSlider">
@@ -125,33 +137,39 @@
                 <div class="slider-dots" id="sliderDots"></div>
             </div>
 
-            <!-- Блок преимуществ из изображений -->
+            <!-- ПРОБЛЕМА 2 ИСПРАВЛЕНА: блок преимуществ -->
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <img src="quality.webp" alt="Качество" class="benefit-icon">
-                    <span>Качество</span>
-                    <span class="benefit-sub">100% контроль</span>
+                    <div class="benefit-text">
+                        <span class="benefit-title">Качество</span>
+                        <span class="benefit-sub">100% контроль</span>
+                    </div>
                 </div>
                 <div class="benefit-card">
                     <img src="XXL_height.webp" alt="Опыт" class="benefit-icon">
-                    <span>Опыт</span>
-                    <span class="benefit-sub">Большой опыт</span>
+                    <div class="benefit-text">
+                        <span class="benefit-title">Опыт</span>
+                        <span class="benefit-sub">Большой опыт</span>
+                    </div>
                 </div>
                 <div class="benefit-card">
                     <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Профессионализм" class="benefit-icon">
-                    <span>Профессионализм</span>
-                    <span class="benefit-sub">Высокий уровень</span>
+                    <div class="benefit-text">
+                        <span class="benefit-title">Профессионализм</span>
+                        <span class="benefit-sub">Высокий уровень</span>
+                    </div>
                 </div>
             </div>
 
-            <h3 style="margin-top:8px;">Мои заявки</h3>
+            <h3>Мои заявки</h3>
             <div id="profileRequests" class="mt-8"></div>
 
-            <h3 style="margin-top:16px;">Оставить отзыв</h3>
+            <h3>Оставить отзыв</h3>
             <div id="reviewSection">
                 <div class="form-group">
                     <label>Выберите курс для отзыва</label>
-                    <select id="reviewRequestSelect" class="mb-12" style="border-radius:30px;">
+                    <select id="reviewRequestSelect" class="mb-12">
                         <option value="">— выберите завершённую заявку —</option>
                     </select>
                 </div>
@@ -172,7 +190,7 @@
                 </div>
                 <div class="form-group">
                     <label>Ваши впечатления</label>
-                    <select id="reviewMood" style="border-radius:30px;">
+                    <select id="reviewMood">
                         <option value="positive">😊 Понравилось</option>
                         <option value="neutral">😐 Нормально</option>
                         <option value="negative">😞 Не понравилось</option>
@@ -183,7 +201,9 @@
             </div>
         </div>
 
-        <!-- ============ СТРАНИЦА 4: НОВАЯ ЗАЯВКА ============ -->
+        <!-- ============================================================ -->
+        <!-- СТРАНИЦА 4: НОВАЯ ЗАЯВКА -->
+        <!-- ============================================================ -->
         <div class="page" id="page-request">
             <div class="flex-between">
                 <h2>Новая заявка</h2>
@@ -215,7 +235,7 @@
                 </div>
                 <button type="submit" class="btn btn-dark">Отправить заявку</button>
             </form>
-            <div class="mt-12 text-small" style="color:#666;">
+            <div class="mt-12 text-small">
                 <div class="contact-info">
                     <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Лого" class="contact-logo">
                     <div>
@@ -227,7 +247,9 @@
             </div>
         </div>
 
-        <!-- ============ СТРАНИЦА 5: АДМИНКА ============ -->
+        <!-- ============================================================ -->
+        <!-- СТРАНИЦА 5: АДМИНКА -->
+        <!-- ============================================================ -->
         <div class="page" id="page-admin">
             <div class="flex-between">
                 <div class="logo-header small">
@@ -237,7 +259,6 @@
                 <button class="nav-link logout-btn" id="adminLogoutBtn">Выйти</button>
             </div>
             
-            <!-- Статистика -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number" id="statTotal">0</span>
@@ -264,14 +285,16 @@
                     <option value="Идет обучение">Идет обучение</option>
                     <option value="Обучение завершено">Обучение завершено</option>
                 </select>
-                <input type="text" id="adminSearch" placeholder="Поиск по курсу или пользователю..." style="flex:2;">
-                <button class="btn btn-sm btn-outline" id="adminClearFilters" style="width:auto;padding:8px 14px;">✕</button>
+                <input type="text" id="adminSearch" placeholder="Поиск по курсу или пользователю...">
+                <button class="btn btn-sm btn-outline" id="adminClearFilters">✕</button>
             </div>
             <div id="adminRequestsList"></div>
             <div class="pagination" id="adminPagination"></div>
         </div>
 
-        <!-- ============ НАВИГАЦИОННОЕ МЕНЮ (ИСПРАВЛЕНО) ============ -->
+        <!-- ============================================================ -->
+        <!-- НАВИГАЦИОННОЕ МЕНЮ -->
+        <!-- ============================================================ -->
         <div class="bottom-nav">
             <button class="nav-btn" data-page="page-profile" id="navProfile">
                 <span class="nav-icon">👤</span>

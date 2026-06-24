@@ -49,7 +49,6 @@ function showToast(msg, duration = 2500) {
 function navigate(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
-    // Обновляем активную кнопку в навигации
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.page === pageId);
     });
@@ -104,7 +103,7 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     }
 
     if (!name || !phone || !email) {
-        showToast('Заполните все поля!');
+        showToast('⚠️ Заполните все поля!');
         valid = false;
     }
 
@@ -112,7 +111,7 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
 
     const users = DB.getUsers();
     if (users.find(u => u.login === login)) {
-        showToast('Логин уже занят');
+        showToast('⚠️ Логин уже занят');
         return;
     }
 
@@ -187,7 +186,6 @@ document.querySelectorAll('[data-page]').forEach(btn => {
     });
 });
 
-// Админ кнопка в навигации
 document.getElementById('adminNavBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
     if (!user || user.login !== 'Admin26') {
@@ -216,7 +214,6 @@ stars.forEach(star => {
     star.addEventListener('click', function() {
         selectedRating = parseInt(this.dataset.value);
         updateStars();
-        // Микроанимация
         this.style.transform = 'scale(1.3)';
         setTimeout(() => this.style.transform = 'scale(1)', 200);
     });
@@ -297,12 +294,14 @@ document.querySelectorAll('.slider-btn, .slider-dot').forEach(el => {
 });
 
 // ================================================================
-//  ЛИЧНЫЙ КАБИНЕТ
+//  ЛИЧНЫЙ КАБИНЕТ - ИСПРАВЛЕНА ПРОБЛЕМА 1
 // ================================================================
 function renderProfile() {
     const user = DB.getCurrentUser();
     if (!user) return;
-    document.getElementById('profileUser').textContent = '👤 ' + user.name;
+    
+    // ИСПРАВЛЕНО: раздельный вывод "Участник" и имени
+    document.getElementById('profileUser').textContent = user.name;
 
     const allRequests = DB.getRequests();
     const userRequests = allRequests.filter(r => r.userLogin === user.login);
@@ -321,13 +320,12 @@ function renderProfile() {
                     <span class="status-badge ${getStatusClass(r.status)}">${statusEmoji[r.status] || ''} ${r.status}</span>
                 </div>
                 <div class="text-small">📅 ${r.date} | 💳 ${r.payment}</div>
-                ${r.status === 'Обучение завершено' ? `<div class="text-small" style="color:#0d47a1;">✏️ Можно оставить отзыв</div>` : ''}
+                ${r.status === 'Обучение завершено' ? '<div class="text-small" style="color:#0d47a1;">✏️ Можно оставить отзыв</div>' : ''}
             `;
             container.appendChild(div);
         });
     }
 
-    // Обновляем выпадающий список для отзывов
     const select = document.getElementById('reviewRequestSelect');
     select.innerHTML = '<option value="">— выберите завершённую заявку —</option>';
     const completedRequests = userRequests.filter(r => r.status === 'Обучение завершено');
@@ -337,12 +335,11 @@ function renderProfile() {
         completedRequests.forEach(r => {
             const opt = document.createElement('option');
             opt.value = r.id;
-            opt.textContent = `${r.course} (${r.date})`;
+            opt.textContent = r.course + ' (' + r.date + ')';
             select.appendChild(opt);
         });
     }
 
-    // Отображаем отзывы
     renderReviews();
 }
 
@@ -434,7 +431,7 @@ document.getElementById('requestForm').addEventListener('submit', function(e) {
 
     const requests = DB.getRequests();
     const newReq = {
-        id: `req-${Date.now()}`,
+        id: 'req-' + Date.now(),
         userLogin: user.login,
         course: course,
         date: date,
@@ -471,7 +468,6 @@ function renderAdmin() {
         );
     }
 
-    // Статистика
     document.getElementById('statTotal').textContent = allRequests.length;
     document.getElementById('statNew').textContent = allRequests.filter(r => r.status === 'Новая').length;
     document.getElementById('statLearning').textContent = allRequests.filter(r => r.status === 'Идет обучение').length;
@@ -518,7 +514,7 @@ function renderAdmin() {
         btn.addEventListener('click', () => {
             adminCurrentPage = i;
             renderAdmin();
-            showToast(`📄 Страница ${i}`, 1000);
+            showToast('📄 Страница ' + i, 1000);
         });
         pagContainer.appendChild(btn);
     }
@@ -533,14 +529,13 @@ function renderAdmin() {
                 req.status = newStatus;
                 DB.setRequests(requests);
                 const emoji = { 'Новая': '📌', 'Идет обучение': '📖', 'Обучение завершено': '✅' };
-                showToast(`✅ Статус изменён на «${emoji[newStatus] || ''} ${newStatus}»`);
+                showToast('✅ Статус изменён на «' + (emoji[newStatus] || '') + ' ' + newStatus + '»');
                 renderAdmin();
             }
         });
     });
 }
 
-// Очистка фильтров
 document.getElementById('adminClearFilters').addEventListener('click', function() {
     document.getElementById('adminStatusFilter').value = 'all';
     document.getElementById('adminSearch').value = '';

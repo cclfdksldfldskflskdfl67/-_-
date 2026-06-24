@@ -40,7 +40,7 @@ body {
 }
 h1 { font-size: 36px; font-weight: 700; color: var(--dark-blue); letter-spacing: -0.5px; }
 h2 { font-size: 24px; font-weight: 600; color: var(--dark-blue); }
-h3 { font-size: 18px; font-weight: 600; color: var(--dark-blue); }
+h3 { font-size: 18px; font-weight: 600; color: var(--dark-blue); margin-top: 12px; }
 p, li, label, input, select, button, .text-base {
     font-size: 16px;
     font-weight: 400;
@@ -81,6 +81,32 @@ p, li, label, input, select, button, .text-base {
 }
 .logo-header.small h2 {
     font-size: 20px;
+}
+
+/* ============================================================
+   ПРОБЛЕМА 1 ИСПРАВЛЕНА: раздельный вывод пользователя
+   ============================================================ */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0 12px 0;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 12px;
+}
+.user-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #6c757d;
+    background: #f1f3f5;
+    padding: 2px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+.user-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 /* ============================================================
@@ -203,7 +229,7 @@ textarea {
 }
 
 /* ============================================================
-   НАВИГАЦИОННЫЕ КНОПКИ (ГЛАВНОЕ ИСПРАВЛЕНИЕ)
+   НАВИГАЦИОННЫЕ КНОПКИ
    ============================================================ */
 .bottom-nav {
     display: flex;
@@ -263,7 +289,6 @@ textarea {
 .nav-btn.active .nav-icon {
     transform: scale(1.05);
 }
-/* Активная полоска под кнопкой */
 .nav-btn.active::after {
     content: '';
     position: absolute;
@@ -305,7 +330,7 @@ textarea {
 }
 
 /* ============================================================
-   СЛАЙДЕР С ИЗОБРАЖЕНИЯМИ
+   СЛАЙДЕР
    ============================================================ */
 .slider-container {
     position: relative;
@@ -425,7 +450,7 @@ textarea {
 }
 
 /* ============================================================
-   БЛОК ПРЕИМУЩЕСТВ (ИСПРАВЛЕН)
+   ПРОБЛЕМА 2 ИСПРАВЛЕНА: блок преимуществ
    ============================================================ */
 .benefits-grid {
     display: grid;
@@ -440,6 +465,10 @@ textarea {
     text-align: center;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     border: 1px solid var(--light-gray);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 110px;
 }
 .benefit-card:active {
     transform: scale(0.96);
@@ -450,19 +479,34 @@ textarea {
     border-radius: 12px;
     object-fit: cover;
     display: block;
-    margin: 0 auto 8px;
+    margin: 0 auto 6px;
+    flex-shrink: 0;
 }
-.benefit-card span {
+.benefit-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+.benefit-title {
     display: block;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--text-primary);
+    line-height: 1.2;
+    word-break: break-word;
+    max-width: 100%;
 }
-.benefit-card .benefit-sub {
-    font-size: 10px;
+.benefit-sub {
+    display: block;
+    font-size: 9px;
     font-weight: 400;
     color: var(--text-secondary);
     margin-top: 2px;
+    line-height: 1.2;
+    word-break: break-word;
+    max-width: 100%;
 }
 
 /* ============================================================
@@ -490,9 +534,11 @@ textarea {
     color: var(--dark-blue);
 }
 .stat-label {
+    display: block;
     font-size: 10px;
     font-weight: 500;
     color: var(--text-secondary);
+    margin-top: 2px;
 }
 .stat-card.stat-new .stat-number { color: #28a745; }
 .stat-card.stat-learning .stat-number { color: #007bff; }
@@ -515,6 +561,7 @@ textarea {
     height: 48px;
     border-radius: 12px;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 /* ============================================================
@@ -569,6 +616,9 @@ textarea {
     padding: 8px 12px;
     border-radius: 40px;
     font-size: 13px;
+}
+.filter-bar input {
+    flex: 2;
 }
 .pagination {
     display: flex;
@@ -637,10 +687,10 @@ textarea {
         width: 50px;
         height: 50px;
     }
-    .benefit-card span {
+    .benefit-title {
         font-size: 14px;
     }
-    .benefit-card .benefit-sub {
+    .benefit-sub {
         font-size: 11px;
     }
     .stats-grid {
@@ -681,6 +731,7 @@ textarea {
     }
     h1 { font-size: 28px; }
     h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
     .slider-slide {
         height: 160px;
     }
@@ -691,21 +742,21 @@ textarea {
         font-size: 11px;
     }
     .benefits-grid {
-        grid-template-columns: repeat(3, 1fr);
         gap: 6px;
+    }
+    .benefit-card {
+        padding: 10px 4px 8px;
+        min-height: 90px;
     }
     .benefit-icon {
         width: 34px;
         height: 34px;
     }
-    .benefit-card {
-        padding: 10px 4px 8px;
+    .benefit-title {
+        font-size: 10px;
     }
-    .benefit-card span {
-        font-size: 11px;
-    }
-    .benefit-card .benefit-sub {
-        font-size: 9px;
+    .benefit-sub {
+        font-size: 8px;
     }
     .btn {
         padding: 10px 16px;
@@ -748,5 +799,20 @@ textarea {
     .rating-text {
         font-size: 12px;
         margin-left: 4px;
+    }
+    .filter-bar select, .filter-bar input {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    .user-info {
+        padding: 6px 0 10px 0;
+        gap: 6px;
+    }
+    .user-label {
+        font-size: 11px;
+        padding: 2px 10px;
+    }
+    .user-name {
+        font-size: 13px;
     }
 }
