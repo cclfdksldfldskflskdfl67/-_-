@@ -18,14 +18,13 @@ const DB = {
     }
 };
 
-// Инициализация: если нет пользователей, создаём админа
+// Инициализация
 if (!localStorage.getItem('users')) {
     DB.setUsers([
         { login: 'Admin26', password: 'Demo20', name: 'Администратор', phone: '', email: '' }
     ]);
 }
 
-// Создаём тестовые заявки если их нет
 if (!localStorage.getItem('requests') || DB.getRequests().length === 0) {
     DB.setRequests([
         { id: 'req-1', userLogin: 'Admin26', course: 'Повышение квалификации', date: '15.01.2026', payment: 'Оплата картой МИР', status: 'Новая' },
@@ -38,12 +37,16 @@ if (!localStorage.getItem('requests') || DB.getRequests().length === 0) {
 // ================================================================
 //  ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
 // ================================================================
-function showToast(msg, duration = 2500) {
+function showToast(msg, duration = 2500, type = '') {
     const t = document.getElementById('toast');
     t.textContent = msg;
+    t.className = 'toast' + (type ? ' ' + type : '');
     t.classList.add('show');
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.remove('show'), duration);
+    t._timer = setTimeout(() => {
+        t.classList.remove('show');
+        setTimeout(() => { t.className = 'toast'; }, 300);
+    }, duration);
 }
 
 function navigate(pageId) {
@@ -67,10 +70,6 @@ function isValidLogin(login) {
 
 function isValidPassword(pass) {
     return pass.length >= 8;
-}
-
-function isValidDate(d) {
-    return /^\d{2}\.\d{2}\.\d{4}$/.test(d);
 }
 
 // ================================================================
@@ -103,7 +102,7 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
     }
 
     if (!name || !phone || !email) {
-        showToast('⚠️ Заполните все поля!');
+        showToast('⚠️ Заполните все поля!', 2500, 'warning');
         valid = false;
     }
 
@@ -111,13 +110,13 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
 
     const users = DB.getUsers();
     if (users.find(u => u.login === login)) {
-        showToast('⚠️ Логин уже занят');
+        showToast('⚠️ Логин уже занят', 2500, 'warning');
         return;
     }
 
     users.push({ login, password, name, phone, email });
     DB.setUsers(users);
-    showToast('✅ Регистрация успешна! Войдите.');
+    showToast('✅ Регистрация успешна! Войдите.', 2500, 'success');
     navigate('page-login');
     document.getElementById('registerForm').reset();
 });
@@ -136,7 +135,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     if (user) {
         err.classList.remove('show');
         DB.setCurrentUser(user);
-        showToast('👋 Добро пожаловать, ' + user.name);
+        showToast('👋 Добро пожаловать, ' + user.name, 2500, 'success');
         navigate('page-profile');
         renderProfile();
         document.getElementById('loginForm').reset();
@@ -151,12 +150,12 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 document.getElementById('logoutBtn').addEventListener('click', () => {
     DB.setCurrentUser(null);
     navigate('page-login');
-    showToast('👋 До свидания!');
+    showToast('👋 До свидания!', 2000);
 });
 document.getElementById('adminLogoutBtn').addEventListener('click', () => {
     DB.setCurrentUser(null);
     navigate('page-login');
-    showToast('👋 До свидания!');
+    showToast('👋 До свидания!', 2000);
 });
 
 // ================================================================
@@ -168,14 +167,14 @@ document.querySelectorAll('[data-page]').forEach(btn => {
         if (page === 'page-admin') {
             const user = DB.getCurrentUser();
             if (!user || user.login !== 'Admin26') {
-                showToast('⛔ Доступ только для администратора');
+                showToast('⛔ Доступ только для администратора', 2500, 'error');
                 return;
             }
         }
         if (page === 'page-profile' || page === 'page-request') {
             const user = DB.getCurrentUser();
             if (!user) {
-                showToast('⚠️ Сначала войдите в систему');
+                showToast('⚠️ Сначала войдите в систему', 2500, 'warning');
                 navigate('page-login');
                 return;
             }
@@ -189,7 +188,7 @@ document.querySelectorAll('[data-page]').forEach(btn => {
 document.getElementById('adminNavBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
     if (!user || user.login !== 'Admin26') {
-        showToast('⛔ Доступ только для администратора');
+        showToast('⛔ Доступ только для администратора', 2500, 'error');
         return;
     }
     navigate('page-admin');
@@ -294,13 +293,102 @@ document.querySelectorAll('.slider-btn, .slider-dot').forEach(el => {
 });
 
 // ================================================================
-//  ЛИЧНЫЙ КАБИНЕТ - ИСПРАВЛЕНА ПРОБЛЕМА 1
+//  СЧЁТЧИК СИМВОЛОВ
+// ================================================================
+const reviewText = document.getElementById('reviewText');
+const charCount = document.getElementById('charCount');
+
+if (reviewText) {
+    reviewText.addEventListener('input', function() {
+        const count = this.value.length;
+        charCount.textContent = count;
+        if (count > 450) {
+            charCount.style.color = '#dc3545';
+        } else {
+            charCount.style.color = '#999';
+        }
+    });
+}
+
+// ================================================================
+//  АВАТАР ПОЛЬЗОВАТЕЛЯ
+// ================================================================
+const dropZone = document.getElementById('avatarDropZone');
+const avatarInput = document.getElementById('avatarInput');
+const userAvatar = document.getElementById('userAvatar');
+
+if (dropZone) {
+    const savedAvatar = localStorage.getItem('userAvatar');
+    if (savedAvatar) {
+        userAvatar.src = savedAvatar;
+    }
+
+    dropZone.addEventListener('click', () => {
+        avatarInput.click();
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                userAvatar.src = event.target.result;
+                localStorage.setItem('userAvatar', event.target.result);
+                showToast('✅ Аватар обновлён!', 2000, 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    avatarInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                userAvatar.src = event.target.result;
+                localStorage.setItem('userAvatar', event.target.result);
+                showToast('✅ Аватар обновлён!', 2000, 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// ================================================================
+//  ПРОГРЕСС-БАР
+// ================================================================
+function updateProgress() {
+    const user = DB.getCurrentUser();
+    if (!user) return;
+    const allRequests = DB.getRequests();
+    const userRequests = allRequests.filter(r => r.userLogin === user.login);
+    const total = userRequests.length;
+    const completed = userRequests.filter(r => r.status === 'Обучение завершено').length;
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+    
+    const fill = document.getElementById('progressFill');
+    const percentLabel = document.getElementById('progressPercent');
+    if (fill) fill.style.width = percent + '%';
+    if (percentLabel) percentLabel.textContent = percent + '%';
+}
+
+// ================================================================
+//  ЛИЧНЫЙ КАБИНЕТ
 // ================================================================
 function renderProfile() {
     const user = DB.getCurrentUser();
     if (!user) return;
-    
-    // ИСПРАВЛЕНО: раздельный вывод "Участник" и имени
     document.getElementById('profileUser').textContent = user.name;
 
     const allRequests = DB.getRequests();
@@ -341,6 +429,7 @@ function renderProfile() {
     }
 
     renderReviews();
+    updateProgress();
 }
 
 function renderReviews() {
@@ -379,18 +468,18 @@ function renderReviews() {
 // ================================================================
 document.getElementById('submitReviewBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
-    if (!user) { showToast('⚠️ Войдите в систему'); return; }
+    if (!user) { showToast('⚠️ Войдите в систему', 2500, 'warning'); return; }
     const select = document.getElementById('reviewRequestSelect');
     const text = document.getElementById('reviewText').value.trim();
     const mood = document.getElementById('reviewMood').value;
     
-    if (!select.value) { showToast('⚠️ Выберите завершённую заявку'); return; }
-    if (!text) { showToast('⚠️ Напишите текст отзыва'); return; }
-    if (selectedRating === 0) { showToast('⭐ Поставьте оценку'); return; }
+    if (!select.value) { showToast('⚠️ Выберите завершённую заявку', 2500, 'warning'); return; }
+    if (!text) { showToast('⚠️ Напишите текст отзыва', 2500, 'warning'); return; }
+    if (selectedRating === 0) { showToast('⭐ Поставьте оценку', 2500, 'warning'); return; }
 
     const allRequests = DB.getRequests();
     const request = allRequests.find(r => r.id === select.value);
-    if (!request) { showToast('❌ Заявка не найдена'); return; }
+    if (!request) { showToast('❌ Заявка не найдена', 2500, 'error'); return; }
 
     const reviews = DB.getReviews();
     reviews.push({
@@ -402,7 +491,7 @@ document.getElementById('submitReviewBtn').addEventListener('click', function() 
         date: new Date().toLocaleDateString()
     });
     DB.setReviews(reviews);
-    showToast('✅ Отзыв сохранён! Спасибо! 🌟');
+    showToast('✅ Отзыв сохранён! Спасибо! 🌟', 2500, 'success');
     document.getElementById('reviewText').value = '';
     selectedRating = 0;
     updateStars();
@@ -415,32 +504,35 @@ document.getElementById('submitReviewBtn').addEventListener('click', function() 
 document.getElementById('requestForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const user = DB.getCurrentUser();
-    if (!user) { showToast('⚠️ Войдите в систему'); return; }
+    if (!user) { showToast('⚠️ Войдите в систему', 2500, 'warning'); return; }
 
     const course = document.getElementById('requestCourse').value;
-    const date = document.getElementById('requestDate').value.trim();
+    const dateInput = document.getElementById('requestDate').value;
     const payment = document.getElementById('requestPayment').value;
     const dateErr = document.getElementById('requestDateError');
 
-    if (!isValidDate(date)) {
+    if (!dateInput) {
         dateErr.classList.add('show');
         return;
     } else {
         dateErr.classList.remove('show');
     }
 
+    const dateParts = dateInput.split('-');
+    const formattedDate = dateParts[2] + '.' + dateParts[1] + '.' + dateParts[0];
+
     const requests = DB.getRequests();
     const newReq = {
         id: 'req-' + Date.now(),
         userLogin: user.login,
         course: course,
-        date: date,
+        date: formattedDate,
         payment: payment,
         status: 'Новая'
     };
     requests.push(newReq);
     DB.setRequests(requests);
-    showToast('✅ Заявка отправлена! 📨');
+    showToast('✅ Заявка отправлена! 📨', 2500, 'success');
     document.getElementById('requestForm').reset();
     navigate('page-profile');
     renderProfile();
@@ -529,7 +621,7 @@ function renderAdmin() {
                 req.status = newStatus;
                 DB.setRequests(requests);
                 const emoji = { 'Новая': '📌', 'Идет обучение': '📖', 'Обучение завершено': '✅' };
-                showToast('✅ Статус изменён на «' + (emoji[newStatus] || '') + ' ' + newStatus + '»');
+                showToast('✅ Статус изменён на «' + (emoji[newStatus] || '') + ' ' + newStatus + '»', 2500, 'success');
                 renderAdmin();
             }
         });
@@ -552,6 +644,86 @@ document.getElementById('adminSearch').addEventListener('input', () => {
     adminCurrentPage = 1;
     renderAdmin();
 });
+
+// ================================================================
+//  ЭКСПОРТ ДАННЫХ
+// ================================================================
+const exportBtn = document.getElementById('exportDataBtn');
+if (exportBtn) {
+    exportBtn.addEventListener('click', function() {
+        const data = {
+            users: DB.getUsers(),
+            requests: DB.getRequests(),
+            reviews: DB.getReviews(),
+            exportedAt: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `uchus_data_${new Date().toLocaleDateString()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('📥 Данные экспортированы!', 2000, 'success');
+    });
+}
+
+// ================================================================
+//  ТЁМНАЯ ТЕМА
+// ================================================================
+const themeSwitch = document.getElementById('themeSwitch');
+let isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    localStorage.setItem('darkMode', isDarkMode);
+    themeSwitch.textContent = isDarkMode ? '☀️' : '🌙';
+}
+
+if (isDarkMode) {
+    document.body.classList.add('dark-mode');
+    themeSwitch.textContent = '☀️';
+}
+
+themeSwitch.addEventListener('click', toggleTheme);
+
+// ================================================================
+//  КНОПКА "НАВЕРХ"
+// ================================================================
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+        scrollTopBtn.classList.add('visible');
+    } else {
+        scrollTopBtn.classList.remove('visible');
+    }
+});
+
+scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ================================================================
+//  ПЕЧАТНАЯ МАШИНКА
+// ================================================================
+(function typingEffect() {
+    const title = document.getElementById('typingTitle');
+    if (!title) return;
+    const text = 'Учусь.РФ';
+    let index = 0;
+    title.textContent = '';
+    
+    function type() {
+        if (index < text.length) {
+            title.textContent += text.charAt(index);
+            index++;
+            setTimeout(type, 100);
+        }
+    }
+    type();
+})();
 
 // ================================================================
 //  ИНИЦИАЛИЗАЦИЯ

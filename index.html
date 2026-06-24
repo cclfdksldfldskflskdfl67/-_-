@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Переключатель темы -->
+    <div class="theme-toggle">
+        <button id="themeSwitch" class="theme-btn">🌙</button>
+    </div>
+
+    <!-- Кнопка "Наверх" -->
+    <button id="scrollTopBtn" class="scroll-top-btn">↑</button>
+
     <div class="app" id="app">
         <div class="toast" id="toast"></div>
 
@@ -19,7 +27,7 @@
         <div class="page active" id="page-register">
             <div class="logo-header">
                 <img src="./assets/20220922_logo.jpg" alt="Учусь.РФ" class="logo-img">
-                <h1>Учусь.РФ</h1>
+                <h1 id="typingTitle">Учусь.РФ</h1>
             </div>
             <p class="text-small" style="margin-bottom: 16px;">Создайте аккаунт для записи на курсы</p>
             <form id="registerForm" autocomplete="off">
@@ -81,7 +89,7 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- СТРАНИЦА 3: ЛИЧНЫЙ КАБИНЕТ (ИСПРАВЛЕН) -->
+        <!-- СТРАНИЦА 3: ЛИЧНЫЙ КАБИНЕТ -->
         <!-- ============================================================ -->
         <div class="page" id="page-profile">
             <div class="flex-between">
@@ -92,10 +100,29 @@
                 <button class="nav-link logout-btn" id="logoutBtn">Выйти</button>
             </div>
             
-            <!-- ИСПРАВЛЕНО: раздельный вывод пользователя -->
+            <!-- Аватар пользователя -->
+            <div class="user-avatar-container">
+                <div class="avatar-drop-zone" id="avatarDropZone">
+                    <img src="./assets/avatar-placeholder.png" alt="Аватар" class="user-avatar" id="userAvatar">
+                    <span class="avatar-hint">Перетащите фото</span>
+                </div>
+                <input type="file" id="avatarInput" accept="image/*" style="display:none">
+            </div>
+
             <div class="user-info">
                 <span class="user-label">Участник</span>
                 <span class="user-name" id="profileUser">Иванов И.И.</span>
+            </div>
+
+            <!-- Прогресс-бар заявок -->
+            <div class="progress-container">
+                <div class="progress-label">
+                    <span>Прогресс обучения</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+                </div>
             </div>
 
             <!-- Слайдер -->
@@ -135,7 +162,7 @@
                 <div class="slider-dots" id="sliderDots"></div>
             </div>
 
-            <!-- ИСПРАВЛЕНО: блок преимуществ с правильными размерами -->
+            <!-- Блок преимуществ -->
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <img src="quality.webp" alt="Качество" class="benefit-icon">
@@ -184,7 +211,10 @@
                 </div>
                 <div class="form-group">
                     <label>Текст отзыва</label>
-                    <textarea id="reviewText" placeholder="Напишите отзыв о курсе..." rows="3"></textarea>
+                    <textarea id="reviewText" placeholder="Напишите отзыв о курсе..." rows="3" maxlength="500"></textarea>
+                    <div class="char-counter">
+                        <span id="charCount">0</span>/500 символов
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>Ваши впечатления</label>
@@ -219,9 +249,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Дата старта (ДД.ММ.ГГГГ)</label>
-                    <input type="text" id="requestDate" placeholder="01.01.2026" required>
-                    <div class="error-hint" id="requestDateError">Введите дату в формате ДД.ММ.ГГГГ</div>
+                    <label>Дата старта</label>
+                    <input type="date" id="requestDate" required>
+                    <div class="error-hint" id="requestDateError">Выберите дату</div>
                 </div>
                 <div class="form-group">
                     <label>Способ оплаты</label>
@@ -276,6 +306,11 @@
                 </div>
             </div>
             
+            <!-- Экспорт данных -->
+            <div class="admin-actions">
+                <button class="btn btn-sm" id="exportDataBtn" style="width:auto;padding:8px 16px;">📥 Экспорт данных</button>
+            </div>
+
             <div class="filter-bar">
                 <select id="adminStatusFilter">
                     <option value="all">Все статусы</option>
