@@ -203,16 +203,16 @@ textarea {
 }
 
 /* ============================================================
-   НАВИГАЦИОННЫЕ КНОПКИ (ИСПРАВЛЕНО)
+   НАВИГАЦИОННЫЕ КНОПКИ (ГЛАВНОЕ ИСПРАВЛЕНИЕ)
    ============================================================ */
 .bottom-nav {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: stretch;
     margin-top: 24px;
     border-top: 1px solid #dee2e6;
-    padding-top: 16px;
-    gap: 8px;
+    padding-top: 14px;
+    gap: 6px;
 }
 .nav-btn {
     display: flex;
@@ -222,35 +222,57 @@ textarea {
     gap: 2px;
     background: none;
     border: none;
-    padding: 8px 16px;
+    padding: 10px 12px;
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.2s ease;
-    min-width: 70px;
     flex: 1;
+    min-width: 60px;
+    max-width: 120px;
+    position: relative;
 }
 .nav-btn:active {
     background: #e6f0ff;
     transform: scale(0.95);
 }
 .nav-btn .nav-icon {
-    font-size: 24px;
+    font-size: 26px;
     line-height: 1.2;
+    transition: transform 0.2s ease;
+}
+.nav-btn:hover .nav-icon {
+    transform: scale(1.1);
 }
 .nav-btn .nav-label {
     font-size: 12px;
     font-weight: 600;
     color: var(--text-secondary);
     transition: color 0.2s;
+    text-align: center;
 }
 .nav-btn:hover .nav-label {
     color: var(--blue);
 }
+.nav-btn.active {
+    background: #f0f7ff;
+    border-radius: 16px;
+}
 .nav-btn.active .nav-label {
     color: var(--blue);
 }
-.nav-btn.active {
-    background: #f0f7ff;
+.nav-btn.active .nav-icon {
+    transform: scale(1.05);
+}
+/* Активная полоска под кнопкой */
+.nav-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 30%;
+    right: 30%;
+    height: 3px;
+    background: var(--blue);
+    border-radius: 10px;
 }
 
 /* ============================================================
@@ -381,6 +403,7 @@ textarea {
     align-items: center;
     gap: 6px;
     padding: 4px 0;
+    flex-wrap: wrap;
 }
 .star {
     font-size: 32px;
@@ -392,7 +415,7 @@ textarea {
 .star:hover,
 .star.active {
     color: #f5b342;
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 .rating-text {
     font-size: 14px;
@@ -402,7 +425,7 @@ textarea {
 }
 
 /* ============================================================
-   БЛОК ПРЕИМУЩЕСТВ
+   БЛОК ПРЕИМУЩЕСТВ (ИСПРАВЛЕН)
    ============================================================ */
 .benefits-grid {
     display: grid;
@@ -413,24 +436,33 @@ textarea {
 .benefit-card {
     background: #f8f9fa;
     border-radius: 16px;
-    padding: 10px 6px;
+    padding: 14px 8px 12px;
     text-align: center;
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     border: 1px solid var(--light-gray);
 }
-.benefit-card:active { transform: scale(0.96); }
+.benefit-card:active {
+    transform: scale(0.96);
+}
 .benefit-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     object-fit: cover;
     display: block;
-    margin: 0 auto 6px;
+    margin: 0 auto 8px;
 }
 .benefit-card span {
-    font-size: 11px;
-    font-weight: 600;
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+.benefit-card .benefit-sub {
+    font-size: 10px;
+    font-weight: 400;
     color: var(--text-secondary);
+    margin-top: 2px;
 }
 
 /* ============================================================
@@ -448,7 +480,9 @@ textarea {
     padding: 12px 8px;
     text-align: center;
     border: 1px solid var(--light-gray);
+    transition: transform 0.15s ease;
 }
+.stat-card:active { transform: scale(0.97); }
 .stat-number {
     display: block;
     font-size: 24px;
@@ -604,7 +638,10 @@ textarea {
         height: 50px;
     }
     .benefit-card span {
-        font-size: 13px;
+        font-size: 14px;
+    }
+    .benefit-card .benefit-sub {
+        font-size: 11px;
     }
     .stats-grid {
         gap: 12px;
@@ -613,7 +650,7 @@ textarea {
         font-size: 28px;
     }
     .nav-btn {
-        padding: 10px 20px;
+        padding: 12px 16px;
         min-width: 80px;
     }
     .nav-btn .nav-icon {
@@ -658,11 +695,17 @@ textarea {
         gap: 6px;
     }
     .benefit-icon {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
+    }
+    .benefit-card {
+        padding: 10px 4px 8px;
     }
     .benefit-card span {
-        font-size: 10px;
+        font-size: 11px;
+    }
+    .benefit-card .benefit-sub {
+        font-size: 9px;
     }
     .btn {
         padding: 10px 16px;
@@ -677,8 +720,8 @@ textarea {
         gap: 4px;
     }
     .nav-btn {
-        padding: 6px 10px;
-        min-width: 56px;
+        padding: 6px 8px;
+        min-width: 50px;
     }
     .nav-btn .nav-icon {
         font-size: 20px;
@@ -698,5 +741,12 @@ textarea {
     }
     .star {
         font-size: 26px;
+    }
+    .stars-container {
+        gap: 4px;
+    }
+    .rating-text {
+        font-size: 12px;
+        margin-left: 4px;
     }
 }

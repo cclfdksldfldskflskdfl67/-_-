@@ -26,11 +26,12 @@ if (!localStorage.getItem('users')) {
 }
 
 // Создаём тестовые заявки если их нет
-if (!localStorage.getItem('requests')) {
+if (!localStorage.getItem('requests') || DB.getRequests().length === 0) {
     DB.setRequests([
         { id: 'req-1', userLogin: 'Admin26', course: 'Повышение квалификации', date: '15.01.2026', payment: 'Оплата картой МИР', status: 'Новая' },
         { id: 'req-2', userLogin: 'Admin26', course: 'Курс по охране труда', date: '20.02.2026', payment: 'Предоплата по QR-коду', status: 'Идет обучение' },
         { id: 'req-3', userLogin: 'Admin26', course: 'Курс переподготовки', date: '10.03.2026', payment: 'Постоплата в офисе', status: 'Обучение завершено' },
+        { id: 'req-4', userLogin: 'Admin26', course: 'Курс профессиональной безопасности', date: '05.04.2026', payment: 'Оплата картой МИР', status: 'Обучение завершено' },
     ]);
 }
 
@@ -48,6 +49,10 @@ function showToast(msg, duration = 2500) {
 function navigate(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
+    // Обновляем активную кнопку в навигации
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.page === pageId);
+    });
 }
 
 function getStatusClass(status) {
@@ -113,7 +118,7 @@ document.getElementById('registerForm').addEventListener('submit', function(e) {
 
     users.push({ login, password, name, phone, email });
     DB.setUsers(users);
-    showToast('Регистрация успешна! Войдите.');
+    showToast('✅ Регистрация успешна! Войдите.');
     navigate('page-login');
     document.getElementById('registerForm').reset();
 });
@@ -132,7 +137,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     if (user) {
         err.classList.remove('show');
         DB.setCurrentUser(user);
-        showToast('Добро пожаловать, ' + user.name);
+        showToast('👋 Добро пожаловать, ' + user.name);
         navigate('page-profile');
         renderProfile();
         document.getElementById('loginForm').reset();
@@ -147,12 +152,12 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 document.getElementById('logoutBtn').addEventListener('click', () => {
     DB.setCurrentUser(null);
     navigate('page-login');
-    showToast('Вы вышли');
+    showToast('👋 До свидания!');
 });
 document.getElementById('adminLogoutBtn').addEventListener('click', () => {
     DB.setCurrentUser(null);
     navigate('page-login');
-    showToast('Вы вышли');
+    showToast('👋 До свидания!');
 });
 
 // ================================================================
@@ -164,14 +169,14 @@ document.querySelectorAll('[data-page]').forEach(btn => {
         if (page === 'page-admin') {
             const user = DB.getCurrentUser();
             if (!user || user.login !== 'Admin26') {
-                showToast('Доступ только для администратора');
+                showToast('⛔ Доступ только для администратора');
                 return;
             }
         }
         if (page === 'page-profile' || page === 'page-request') {
             const user = DB.getCurrentUser();
             if (!user) {
-                showToast('Сначала войдите в систему');
+                showToast('⚠️ Сначала войдите в систему');
                 navigate('page-login');
                 return;
             }
@@ -186,7 +191,7 @@ document.querySelectorAll('[data-page]').forEach(btn => {
 document.getElementById('adminNavBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
     if (!user || user.login !== 'Admin26') {
-        showToast('Доступ только для администратора');
+        showToast('⛔ Доступ только для администратора');
         return;
     }
     navigate('page-admin');
@@ -211,19 +216,25 @@ stars.forEach(star => {
     star.addEventListener('click', function() {
         selectedRating = parseInt(this.dataset.value);
         updateStars();
+        // Микроанимация
+        this.style.transform = 'scale(1.3)';
+        setTimeout(() => this.style.transform = 'scale(1)', 200);
     });
     star.addEventListener('mouseenter', function() {
         const val = parseInt(this.dataset.value);
         stars.forEach(s => {
             if (parseInt(s.dataset.value) <= val) {
                 s.style.color = '#f5b342';
+                s.style.transform = 'scale(1.1)';
             } else {
                 s.style.color = '#ced4da';
+                s.style.transform = 'scale(1)';
             }
         });
     });
     star.addEventListener('mouseleave', function() {
         updateStars();
+        stars.forEach(s => s.style.transform = 'scale(1)');
     });
 });
 
@@ -238,8 +249,8 @@ function updateStars() {
             s.style.color = '#ced4da';
         }
     });
-    const labels = ['', 'Ужасно', 'Плохо', 'Нормально', 'Хорошо', 'Отлично!'];
-    ratingText.textContent = selectedRating > 0 ? `${selectedRating} ★ — ${labels[selectedRating]}` : 'Выберите оценку';
+    const labels = ['', '😞 Ужасно', '😕 Плохо', '😐 Нормально', '😊 Хорошо', '🌟 Отлично!'];
+    ratingText.textContent = selectedRating > 0 ? `${selectedRating} ★ — ${labels[selectedRating]}` : '👆 Выберите оценку';
 }
 
 // ================================================================
@@ -267,8 +278,14 @@ function goToSlide(index) {
     });
 }
 
-document.getElementById('sliderPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
-document.getElementById('sliderNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+document.getElementById('sliderPrev').addEventListener('click', () => {
+    goToSlide(currentSlide - 1);
+    showToast('⬅️ Предыдущий слайд', 1000);
+});
+document.getElementById('sliderNext').addEventListener('click', () => {
+    goToSlide(currentSlide + 1);
+    showToast('➡️ Следующий слайд', 1000);
+});
 
 let autoSlide = setInterval(() => goToSlide(currentSlide + 1), 3000);
 
@@ -285,25 +302,26 @@ document.querySelectorAll('.slider-btn, .slider-dot').forEach(el => {
 function renderProfile() {
     const user = DB.getCurrentUser();
     if (!user) return;
-    document.getElementById('profileUser').textContent = user.name;
+    document.getElementById('profileUser').textContent = '👤 ' + user.name;
 
     const allRequests = DB.getRequests();
     const userRequests = allRequests.filter(r => r.userLogin === user.login);
     const container = document.getElementById('profileRequests');
     container.innerHTML = '';
     if (userRequests.length === 0) {
-        container.innerHTML = '<p class="text-small">У вас пока нет заявок</p>';
+        container.innerHTML = '<p class="text-small">📭 У вас пока нет заявок</p>';
     } else {
         userRequests.forEach((r) => {
             const div = document.createElement('div');
             div.className = 'card';
+            const statusEmoji = { 'Новая': '📌', 'Идет обучение': '📖', 'Обучение завершено': '✅' };
             div.innerHTML = `
                 <div class="flex-between">
                     <strong>${r.course}</strong>
-                    <span class="status-badge ${getStatusClass(r.status)}">${r.status}</span>
+                    <span class="status-badge ${getStatusClass(r.status)}">${statusEmoji[r.status] || ''} ${r.status}</span>
                 </div>
-                <div class="text-small">Дата: ${r.date} | Оплата: ${r.payment}</div>
-                ${r.status === 'Обучение завершено' ? `<div class="text-small" style="color:#0d47a1;">✅ Можно оставить отзыв</div>` : ''}
+                <div class="text-small">📅 ${r.date} | 💳 ${r.payment}</div>
+                ${r.status === 'Обучение завершено' ? `<div class="text-small" style="color:#0d47a1;">✏️ Можно оставить отзыв</div>` : ''}
             `;
             container.appendChild(div);
         });
@@ -312,12 +330,17 @@ function renderProfile() {
     // Обновляем выпадающий список для отзывов
     const select = document.getElementById('reviewRequestSelect');
     select.innerHTML = '<option value="">— выберите завершённую заявку —</option>';
-    userRequests.filter(r => r.status === 'Обучение завершено').forEach(r => {
-        const opt = document.createElement('option');
-        opt.value = r.id;
-        opt.textContent = `${r.course} (${r.date})`;
-        select.appendChild(opt);
-    });
+    const completedRequests = userRequests.filter(r => r.status === 'Обучение завершено');
+    if (completedRequests.length === 0) {
+        select.innerHTML = '<option value="">— нет завершённых заявок —</option>';
+    } else {
+        completedRequests.forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id;
+            opt.textContent = `${r.course} (${r.date})`;
+            select.appendChild(opt);
+        });
+    }
 
     // Отображаем отзывы
     renderReviews();
@@ -331,7 +354,7 @@ function renderReviews() {
     const reviewsContainer = document.getElementById('reviewsList');
     reviewsContainer.innerHTML = '';
     if (userReviews.length === 0) {
-        reviewsContainer.innerHTML = '<p class="text-small">Отзывов пока нет</p>';
+        reviewsContainer.innerHTML = '<p class="text-small">💬 Отзывов пока нет</p>';
     } else {
         userReviews.forEach(r => {
             const div = document.createElement('div');
@@ -347,7 +370,7 @@ function renderReviews() {
                     <span class="review-mood">${moodEmojis[r.mood] || '😊'}</span>
                     <span class="text-small">${r.text}</span>
                 </div>
-                <div class="text-small" style="color:#999;margin-top:4px;">${r.date || ''}</div>
+                <div class="text-small" style="color:#999;margin-top:4px;">📅 ${r.date || ''}</div>
             `;
             reviewsContainer.appendChild(div);
         });
@@ -359,18 +382,18 @@ function renderReviews() {
 // ================================================================
 document.getElementById('submitReviewBtn').addEventListener('click', function() {
     const user = DB.getCurrentUser();
-    if (!user) { showToast('Войдите в систему'); return; }
+    if (!user) { showToast('⚠️ Войдите в систему'); return; }
     const select = document.getElementById('reviewRequestSelect');
     const text = document.getElementById('reviewText').value.trim();
     const mood = document.getElementById('reviewMood').value;
     
-    if (!select.value) { showToast('Выберите завершённую заявку'); return; }
-    if (!text) { showToast('Напишите текст отзыва'); return; }
-    if (selectedRating === 0) { showToast('Поставьте оценку'); return; }
+    if (!select.value) { showToast('⚠️ Выберите завершённую заявку'); return; }
+    if (!text) { showToast('⚠️ Напишите текст отзыва'); return; }
+    if (selectedRating === 0) { showToast('⭐ Поставьте оценку'); return; }
 
     const allRequests = DB.getRequests();
     const request = allRequests.find(r => r.id === select.value);
-    if (!request) { showToast('Заявка не найдена'); return; }
+    if (!request) { showToast('❌ Заявка не найдена'); return; }
 
     const reviews = DB.getReviews();
     reviews.push({
@@ -382,7 +405,7 @@ document.getElementById('submitReviewBtn').addEventListener('click', function() 
         date: new Date().toLocaleDateString()
     });
     DB.setReviews(reviews);
-    showToast('Отзыв сохранён! Спасибо!');
+    showToast('✅ Отзыв сохранён! Спасибо! 🌟');
     document.getElementById('reviewText').value = '';
     selectedRating = 0;
     updateStars();
@@ -395,7 +418,7 @@ document.getElementById('submitReviewBtn').addEventListener('click', function() 
 document.getElementById('requestForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const user = DB.getCurrentUser();
-    if (!user) { showToast('Войдите в систему'); return; }
+    if (!user) { showToast('⚠️ Войдите в систему'); return; }
 
     const course = document.getElementById('requestCourse').value;
     const date = document.getElementById('requestDate').value.trim();
@@ -420,7 +443,7 @@ document.getElementById('requestForm').addEventListener('submit', function(e) {
     };
     requests.push(newReq);
     DB.setRequests(requests);
-    showToast('Заявка отправлена!');
+    showToast('✅ Заявка отправлена! 📨');
     document.getElementById('requestForm').reset();
     navigate('page-profile');
     renderProfile();
@@ -462,24 +485,25 @@ function renderAdmin() {
     const container = document.getElementById('adminRequestsList');
     container.innerHTML = '';
     if (pageItems.length === 0) {
-        container.innerHTML = '<p class="text-small">Заявок нет</p>';
+        container.innerHTML = '<p class="text-small">📭 Заявок нет</p>';
     } else {
+        const statusEmoji = { 'Новая': '📌', 'Идет обучение': '📖', 'Обучение завершено': '✅' };
         pageItems.forEach(r => {
             const div = document.createElement('div');
             div.className = 'card';
             div.innerHTML = `
                 <div class="flex-between">
-                    <div><strong>${r.course}</strong> <span class="text-small">(${r.userLogin})</span></div>
+                    <div><strong>${r.course}</strong> <span class="text-small">👤 ${r.userLogin}</span></div>
                     <div>
                         <select class="status-select" data-id="${r.id}" style="width:auto;padding:4px 10px;border-radius:40px;font-size:13px;">
-                            <option value="Новая" ${r.status === 'Новая' ? 'selected' : ''}>Новая</option>
-                            <option value="Идет обучение" ${r.status === 'Идет обучение' ? 'selected' : ''}>Идет обучение</option>
-                            <option value="Обучение завершено" ${r.status === 'Обучение завершено' ? 'selected' : ''}>Обучение завершено</option>
+                            <option value="Новая" ${r.status === 'Новая' ? 'selected' : ''}>📌 Новая</option>
+                            <option value="Идет обучение" ${r.status === 'Идет обучение' ? 'selected' : ''}>📖 Идет обучение</option>
+                            <option value="Обучение завершено" ${r.status === 'Обучение завершено' ? 'selected' : ''}>✅ Обучение завершено</option>
                         </select>
                     </div>
                 </div>
-                <div class="text-small">Дата: ${r.date} | Оплата: ${r.payment}</div>
-                <span class="status-badge ${getStatusClass(r.status)}">${r.status}</span>
+                <div class="text-small">📅 ${r.date} | 💳 ${r.payment}</div>
+                <span class="status-badge ${getStatusClass(r.status)}">${statusEmoji[r.status] || ''} ${r.status}</span>
             `;
             container.appendChild(div);
         });
@@ -494,6 +518,7 @@ function renderAdmin() {
         btn.addEventListener('click', () => {
             adminCurrentPage = i;
             renderAdmin();
+            showToast(`📄 Страница ${i}`, 1000);
         });
         pagContainer.appendChild(btn);
     }
@@ -507,7 +532,8 @@ function renderAdmin() {
             if (req) {
                 req.status = newStatus;
                 DB.setRequests(requests);
-                showToast(`Статус изменён на «${newStatus}»`);
+                const emoji = { 'Новая': '📌', 'Идет обучение': '📖', 'Обучение завершено': '✅' };
+                showToast(`✅ Статус изменён на «${emoji[newStatus] || ''} ${newStatus}»`);
                 renderAdmin();
             }
         });
@@ -520,6 +546,7 @@ document.getElementById('adminClearFilters').addEventListener('click', function(
     document.getElementById('adminSearch').value = '';
     adminCurrentPage = 1;
     renderAdmin();
+    showToast('🧹 Фильтры очищены', 1000);
 });
 
 document.getElementById('adminStatusFilter').addEventListener('change', () => {
