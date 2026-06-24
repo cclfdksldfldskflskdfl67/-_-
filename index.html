@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Учусь.РФ — онлайн курсы</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app" id="app">
+        <!-- Toast уведомление -->
+        <div class="toast" id="toast"></div>
+
+        <!-- ============ СТРАНИЦА 1: РЕГИСТРАЦИЯ ============ -->
+        <div class="page active" id="page-register">
+            <div class="logo-header">
+                <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img" onerror="this.style.display='none'">
+                <h1>Учусь.РФ</h1>
+            </div>
+            <p class="text-small" style="margin-bottom: 16px;">Создайте аккаунт для записи на курсы</p>
+            <form id="registerForm" autocomplete="off">
+                <div class="form-group">
+                    <label>Логин (лат. + цифры, мин 6)</label>
+                    <input type="text" id="regLogin" placeholder="например: user2026" required>
+                    <div class="error-hint" id="regLoginError">Логин должен содержать латиницу и цифры, минимум 6 символов</div>
+                </div>
+                <div class="form-group">
+                    <label>Пароль (мин 8 символов)</label>
+                    <input type="password" id="regPassword" placeholder="минимум 8 символов" required>
+                    <div class="error-hint" id="regPassError">Пароль должен быть не менее 8 символов</div>
+                </div>
+                <div class="form-group">
+                    <label>ФИО</label>
+                    <input type="text" id="regName" placeholder="Иванов Иван Иванович" required>
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" id="regPhone" placeholder="+7 900 123-45-67" required>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" id="regEmail" placeholder="example@mail.ru" required>
+                </div>
+                <button type="submit" class="btn btn-dark">Зарегистрироваться</button>
+                <div class="text-center mt-12">
+                    <button type="button" class="nav-link" data-page="page-login">Уже есть аккаунт? Войти</button>
+                </div>
+            </form>
+            <div class="text-small mt-12" style="color:#999;">* Все поля обязательны</div>
+        </div>
+
+        <!-- ============ СТРАНИЦА 2: АВТОРИЗАЦИЯ ============ -->
+        <div class="page" id="page-login">
+            <div class="logo-header">
+                <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img" onerror="this.style.display='none'">
+                <h1>Вход</h1>
+            </div>
+            <p class="text-small" style="margin-bottom: 16px;">Введите логин и пароль</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Логин</label>
+                    <input type="text" id="loginLogin" placeholder="логин" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" placeholder="пароль" required>
+                </div>
+                <div class="error-hint" id="loginError" style="margin-bottom:8px;">Неверный логин или пароль</div>
+                <button type="submit" class="btn">Войти</button>
+                <div class="text-center mt-12">
+                    <button type="button" class="nav-link" data-page="page-register">Ещё не зарегистрированы? Регистрация</button>
+                </div>
+            </form>
+            <div class="text-small mt-12" style="color:#999;">Admin: Admin26 / Demo20</div>
+        </div>
+
+        <!-- ============ СТРАНИЦА 3: ЛИЧНЫЙ КАБИНЕТ ============ -->
+        <div class="page" id="page-profile">
+            <div class="flex-between">
+                <div class="logo-header small">
+                    <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img-small" onerror="this.style.display='none'">
+                    <h2>Личный кабинет</h2>
+                </div>
+                <button class="nav-link logout-btn" id="logoutBtn">Выйти</button>
+            </div>
+            <div id="profileUser" class="text-small" style="margin-bottom:12px;">Иванов И.И.</div>
+
+            <!-- Слайдер с изображениями -->
+            <div class="slider-container" id="profileSlider">
+                <div class="slider-track" id="sliderTrack">
+                    <div class="slider-slide">
+                        <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Российская наука" class="slide-img">
+                        <div class="slide-overlay">
+                            <span>Российская наука</span>
+                            <span class="sub">Профессиональная безопасность</span>
+                        </div>
+                    </div>
+                    <div class="slider-slide">
+                        <img src="quality.webp" alt="Контроль качества" class="slide-img">
+                        <div class="slide-overlay">
+                            <span>100% Контроль качества</span>
+                            <span class="sub">Гарантия надёжности</span>
+                        </div>
+                    </div>
+                    <div class="slider-slide">
+                        <img src="XXL_height.webp" alt="Сочетание цены и качества" class="slide-img">
+                        <div class="slide-overlay">
+                            <span>Сочетание цены и качества</span>
+                            <span class="sub">Реализация сложных задач</span>
+                        </div>
+                    </div>
+                    <div class="slider-slide">
+                        <img src="quality.webp" alt="Гарантия качества" class="slide-img">
+                        <div class="slide-overlay">
+                            <span>Гарантия качества</span>
+                            <span class="sub">Соблюдение сроков</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn prev" id="sliderPrev">‹</button>
+                <button class="slider-btn next" id="sliderNext">›</button>
+                <div class="slider-dots" id="sliderDots"></div>
+            </div>
+
+            <!-- Блок преимуществ из изображений -->
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <img src="quality.webp" alt="Качество" class="benefit-icon">
+                    <span>100% контроль</span>
+                </div>
+                <div class="benefit-card">
+                    <img src="XXL_height.webp" alt="Опыт" class="benefit-icon">
+                    <span>Большой опыт</span>
+                </div>
+                <div class="benefit-card">
+                    <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Профессионализм" class="benefit-icon">
+                    <span>Профессионализм</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top:8px;">Мои заявки</h3>
+            <div id="profileRequests" class="mt-8"></div>
+
+            <h3 style="margin-top:16px;">Оставить отзыв</h3>
+            <div id="reviewSection">
+                <div class="form-group">
+                    <label>Выберите курс для отзыва</label>
+                    <select id="reviewRequestSelect" class="mb-12" style="border-radius:30px;">
+                        <option value="">— выберите завершённую заявку —</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Оценка</label>
+                    <div class="stars-container" id="starsContainer">
+                        <span class="star" data-value="1">☆</span>
+                        <span class="star" data-value="2">☆</span>
+                        <span class="star" data-value="3">☆</span>
+                        <span class="star" data-value="4">☆</span>
+                        <span class="star" data-value="5">☆</span>
+                        <span id="ratingText" class="rating-text">Выберите оценку</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Текст отзыва</label>
+                    <textarea id="reviewText" placeholder="Напишите отзыв о курсе..." rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ваши впечатления</label>
+                    <select id="reviewMood" style="border-radius:30px;">
+                        <option value="positive">😊 Понравилось</option>
+                        <option value="neutral">😐 Нормально</option>
+                        <option value="negative">😞 Не понравилось</option>
+                    </select>
+                </div>
+                <button class="btn btn-outline" id="submitReviewBtn">Отправить отзыв</button>
+                <div id="reviewsList" class="mt-12"></div>
+            </div>
+        </div>
+
+        <!-- ============ СТРАНИЦА 4: НОВАЯ ЗАЯВКА ============ -->
+        <div class="page" id="page-request">
+            <div class="flex-between">
+                <h2>Новая заявка</h2>
+                <button class="nav-link back-btn" id="backToProfileFromRequest">← Назад</button>
+            </div>
+            <form id="requestForm">
+                <div class="form-group">
+                    <label>Выберите курс</label>
+                    <select id="requestCourse" required>
+                        <option value="Повышение квалификации">Повышение квалификации</option>
+                        <option value="Курс переподготовки">Курс переподготовки</option>
+                        <option value="Курс по охране труда">Курс по охране труда</option>
+                        <option value="Курс профессиональной безопасности">Курс профессиональной безопасности</option>
+                        <option value="Курс по качеству и стандартизации">Курс по качеству и стандартизации</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Дата старта (ДД.ММ.ГГГГ)</label>
+                    <input type="text" id="requestDate" placeholder="01.01.2026" required>
+                    <div class="error-hint" id="requestDateError">Введите дату в формате ДД.ММ.ГГГГ</div>
+                </div>
+                <div class="form-group">
+                    <label>Способ оплаты</label>
+                    <select id="requestPayment" required>
+                        <option value="Предоплата по QR-коду">Предоплата по QR-коду</option>
+                        <option value="Оплата картой МИР">Оплата картой МИР</option>
+                        <option value="Постоплата в офисе">Постоплата в офисе организации</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-dark">Отправить заявку</button>
+            </form>
+            <div class="mt-12 text-small" style="color:#666;">
+                <div class="contact-info">
+                    <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Лого" class="contact-logo">
+                    <div>
+                        <strong>Учусь.РФ</strong><br>
+                        г. Москва, ул. Большая Ордынка, д. 15<br>
+                        ☎ +7 (495) 123-45-67
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ СТРАНИЦА 5: АДМИНКА ============ -->
+        <div class="page" id="page-admin">
+            <div class="flex-between">
+                <div class="logo-header small">
+                    <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img-small" onerror="this.style.display='none'">
+                    <h2>Панель администратора</h2>
+                </div>
+                <button class="nav-link logout-btn" id="adminLogoutBtn">Выйти</button>
+            </div>
+            
+            <!-- Статистика -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="statTotal">0</span>
+                    <span class="stat-label">Всего заявок</span>
+                </div>
+                <div class="stat-card stat-new">
+                    <span class="stat-number" id="statNew">0</span>
+                    <span class="stat-label">Новые</span>
+                </div>
+                <div class="stat-card stat-learning">
+                    <span class="stat-number" id="statLearning">0</span>
+                    <span class="stat-label">В обучении</span>
+                </div>
+                <div class="stat-card stat-done">
+                    <span class="stat-number" id="statDone">0</span>
+                    <span class="stat-label">Завершено</span>
+                </div>
+            </div>
+            
+            <div class="filter-bar">
+                <select id="adminStatusFilter">
+                    <option value="all">Все статусы</option>
+                    <option value="Новая">Новая</option>
+                    <option value="Идет обучение">Идет обучение</option>
+                    <option value="Обучение завершено">Обучение завершено</option>
+                </select>
+                <input type="text" id="adminSearch" placeholder="Поиск по курсу или пользователю..." style="flex:2;">
+                <button class="btn btn-sm btn-outline" id="adminClearFilters" style="width:auto;padding:8px 14px;">✕</button>
+            </div>
+            <div id="adminRequestsList"></div>
+            <div class="pagination" id="adminPagination"></div>
+        </div>
+
+        <!-- ============ НАВИГАЦИОННОЕ МЕНЮ (исправлено) ============ -->
+        <div class="bottom-nav">
+            <button class="nav-btn" data-page="page-profile" id="navProfile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Кабинет</span>
+            </button>
+            <button class="nav-btn" data-page="page-request" id="navRequest">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Заявка</span>
+            </button>
+            <button class="nav-btn" id="adminNavBtn">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">Админ</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
