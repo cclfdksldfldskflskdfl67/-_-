@@ -21,7 +21,7 @@ body {
     background: #ffffff;
     border-radius: 32px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-    padding: 20px 16px 20px;
+    padding: 20px 16px 30px;
     position: relative;
     transition: all 0.2s;
 }
@@ -203,86 +203,6 @@ textarea {
 }
 
 /* ============================================================
-   НАВИГАЦИОННЫЕ КНОПКИ (ИСПРАВЛЕНО)
-   ============================================================ */
-.bottom-nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    margin-top: 24px;
-    border-top: 1px solid #dee2e6;
-    padding-top: 16px;
-    gap: 8px;
-}
-.nav-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    background: none;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 16px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 70px;
-    flex: 1;
-}
-.nav-btn:active {
-    background: #e6f0ff;
-    transform: scale(0.95);
-}
-.nav-btn .nav-icon {
-    font-size: 24px;
-    line-height: 1.2;
-}
-.nav-btn .nav-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    transition: color 0.2s;
-}
-.nav-btn:hover .nav-label {
-    color: var(--blue);
-}
-.nav-btn.active .nav-label {
-    color: var(--blue);
-}
-.nav-btn.active {
-    background: #f0f7ff;
-}
-
-/* ============================================================
-   КНОПКИ НАВИГАЦИИ (ссылки)
-   ============================================================ */
-.nav-link {
-    background: none;
-    border: none;
-    color: var(--blue);
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 6px 12px;
-    transition: color 0.2s, background 0.2s;
-    border-radius: 20px;
-}
-.nav-link:active {
-    color: var(--dark-blue);
-    background: #e6f0ff;
-}
-.nav-link.logout-btn {
-    color: #dc3545;
-}
-.nav-link.logout-btn:active {
-    color: #a71d2a;
-    background: #fde8ea;
-}
-.nav-link.back-btn {
-    font-size: 14px;
-}
-
-/* ============================================================
    СЛАЙДЕР С ИЗОБРАЖЕНИЯМИ
    ============================================================ */
 .slider-container {
@@ -374,35 +294,7 @@ textarea {
 }
 
 /* ============================================================
-   ЗВЁЗДЫ ДЛЯ ОТЗЫВОВ
-   ============================================================ */
-.stars-container {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 0;
-}
-.star {
-    font-size: 32px;
-    cursor: pointer;
-    color: #ced4da;
-    transition: all 0.2s ease;
-    user-select: none;
-}
-.star:hover,
-.star.active {
-    color: #f5b342;
-    transform: scale(1.1);
-}
-.rating-text {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    margin-left: 8px;
-}
-
-/* ============================================================
-   БЛОК ПРЕИМУЩЕСТВ
+   БЛОК ПРЕИМУЩЕСТВ (из изображений)
    ============================================================ */
 .benefits-grid {
     display: grid;
@@ -434,37 +326,6 @@ textarea {
 }
 
 /* ============================================================
-   СТАТИСТИКА АДМИНКИ
-   ============================================================ */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 16px;
-}
-.stat-card {
-    background: #f8f9fa;
-    border-radius: 16px;
-    padding: 12px 8px;
-    text-align: center;
-    border: 1px solid var(--light-gray);
-}
-.stat-number {
-    display: block;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--dark-blue);
-}
-.stat-label {
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-.stat-card.stat-new .stat-number { color: #28a745; }
-.stat-card.stat-learning .stat-number { color: #007bff; }
-.stat-card.stat-done .stat-number { color: #6c757d; }
-
-/* ============================================================
    КОНТАКТЫ
    ============================================================ */
 .contact-info {
@@ -484,13 +345,32 @@ textarea {
 }
 
 /* ============================================================
-   СТРАНИЦЫ
+   НАВИГАЦИЯ
    ============================================================ */
+.nav-link {
+    background: none;
+    border: none;
+    color: var(--blue);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 6px 0;
+    transition: color 0.2s;
+    text-decoration: underline dotted;
+}
+.nav-link:active { color: var(--dark-blue); }
 .page {
     display: none;
     animation: fadeIn 0.25s ease;
 }
 .page.active { display: block; }
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 24px;
+    border-top: 1px solid #dee2e6;
+    padding-top: 16px;
+}
 
 /* ============================================================
    TOAST
@@ -527,7 +407,6 @@ textarea {
     gap: 8px;
     flex-wrap: wrap;
     margin-bottom: 12px;
-    align-items: center;
 }
 .filter-bar select, .filter-bar input {
     width: auto;
@@ -541,7 +420,6 @@ textarea {
     justify-content: center;
     gap: 8px;
     margin-top: 12px;
-    flex-wrap: wrap;
 }
 .pagination button {
     background: #f1f3f5;
@@ -559,18 +437,10 @@ textarea {
 .pagination button:active { transform: scale(0.95); }
 .review-item {
     background: white;
-    padding: 12px 16px;
+    padding: 10px 14px;
     border-radius: 16px;
     border: 1px solid var(--light-gray);
-    margin-top: 8px;
-}
-.review-item .review-mood {
-    font-size: 20px;
-    margin-right: 6px;
-}
-.review-item .review-stars {
-    color: #f5b342;
-    font-size: 18px;
+    margin-top: 6px;
 }
 
 /* ============================================================
@@ -584,7 +454,7 @@ textarea {
     .app {
         max-width: 480px;
         border-radius: 40px;
-        padding: 28px 24px 30px;
+        padding: 28px 24px 35px;
         box-shadow: 0 20px 60px rgba(0,0,0,0.15);
     }
     .slider-slide {
@@ -606,28 +476,12 @@ textarea {
     .benefit-card span {
         font-size: 13px;
     }
-    .stats-grid {
-        gap: 12px;
-    }
-    .stat-number {
-        font-size: 28px;
-    }
-    .nav-btn {
-        padding: 10px 20px;
-        min-width: 80px;
-    }
-    .nav-btn .nav-icon {
-        font-size: 28px;
-    }
-    .nav-btn .nav-label {
-        font-size: 14px;
-    }
 }
 
 @media (min-width: 1024px) {
     .app {
         max-width: 560px;
-        padding: 32px 28px 35px;
+        padding: 32px 28px 40px;
     }
     .slider-slide {
         height: 300px;
@@ -639,7 +493,7 @@ textarea {
    ============================================================ */
 @media (max-width: 400px) {
     .app {
-        padding: 16px 12px 16px;
+        padding: 16px 12px 24px;
         border-radius: 24px;
     }
     h1 { font-size: 28px; }
@@ -671,32 +525,5 @@ textarea {
     .logo-img {
         width: 40px;
         height: 40px;
-    }
-    .bottom-nav {
-        padding-top: 12px;
-        gap: 4px;
-    }
-    .nav-btn {
-        padding: 6px 10px;
-        min-width: 56px;
-    }
-    .nav-btn .nav-icon {
-        font-size: 20px;
-    }
-    .nav-btn .nav-label {
-        font-size: 10px;
-    }
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-    }
-    .stat-card {
-        padding: 10px 6px;
-    }
-    .stat-number {
-        font-size: 20px;
-    }
-    .star {
-        font-size: 26px;
     }
 }

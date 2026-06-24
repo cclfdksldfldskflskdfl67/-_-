@@ -84,7 +84,7 @@
                     <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img-small" onerror="this.style.display='none'">
                     <h2>Личный кабинет</h2>
                 </div>
-                <button class="nav-link logout-btn" id="logoutBtn">Выйти</button>
+                <button class="nav-link" id="logoutBtn" style="font-size:14px;">Выйти</button>
             </div>
             <div id="profileUser" class="text-small" style="margin-bottom:12px;">Иванов И.И.</div>
 
@@ -146,36 +146,11 @@
 
             <h3 style="margin-top:16px;">Оставить отзыв</h3>
             <div id="reviewSection">
-                <div class="form-group">
-                    <label>Выберите курс для отзыва</label>
-                    <select id="reviewRequestSelect" class="mb-12" style="border-radius:30px;">
-                        <option value="">— выберите завершённую заявку —</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Оценка</label>
-                    <div class="stars-container" id="starsContainer">
-                        <span class="star" data-value="1">☆</span>
-                        <span class="star" data-value="2">☆</span>
-                        <span class="star" data-value="3">☆</span>
-                        <span class="star" data-value="4">☆</span>
-                        <span class="star" data-value="5">☆</span>
-                        <span id="ratingText" class="rating-text">Выберите оценку</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Текст отзыва</label>
-                    <textarea id="reviewText" placeholder="Напишите отзыв о курсе..." rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Ваши впечатления</label>
-                    <select id="reviewMood" style="border-radius:30px;">
-                        <option value="positive">😊 Понравилось</option>
-                        <option value="neutral">😐 Нормально</option>
-                        <option value="negative">😞 Не понравилось</option>
-                    </select>
-                </div>
-                <button class="btn btn-outline" id="submitReviewBtn">Отправить отзыв</button>
+                <select id="reviewRequestSelect" class="mb-12" style="border-radius:30px;">
+                    <option value="">— выберите завершённую заявку —</option>
+                </select>
+                <textarea id="reviewText" placeholder="Напишите отзыв..." rows="2"></textarea>
+                <button class="btn btn-sm btn-outline mt-8" id="submitReviewBtn" style="width:auto;">Отправить отзыв</button>
                 <div id="reviewsList" class="mt-12"></div>
             </div>
         </div>
@@ -184,7 +159,7 @@
         <div class="page" id="page-request">
             <div class="flex-between">
                 <h2>Новая заявка</h2>
-                <button class="nav-link back-btn" id="backToProfileFromRequest">← Назад</button>
+                <button class="nav-link" id="backToProfileFromRequest" style="font-size:14px;">← Назад</button>
             </div>
             <form id="requestForm">
                 <div class="form-group">
@@ -193,8 +168,6 @@
                         <option value="Повышение квалификации">Повышение квалификации</option>
                         <option value="Курс переподготовки">Курс переподготовки</option>
                         <option value="Курс по охране труда">Курс по охране труда</option>
-                        <option value="Курс профессиональной безопасности">Курс профессиональной безопасности</option>
-                        <option value="Курс по качеству и стандартизации">Курс по качеству и стандартизации</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -231,29 +204,8 @@
                     <img src="30f95413dfc906ce9c2ed749a1a6933c.jpg" alt="Учусь.РФ" class="logo-img-small" onerror="this.style.display='none'">
                     <h2>Панель администратора</h2>
                 </div>
-                <button class="nav-link logout-btn" id="adminLogoutBtn">Выйти</button>
+                <button class="nav-link" id="adminLogoutBtn" style="font-size:14px;">Выйти</button>
             </div>
-            
-            <!-- Статистика -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number" id="statTotal">0</span>
-                    <span class="stat-label">Всего заявок</span>
-                </div>
-                <div class="stat-card stat-new">
-                    <span class="stat-number" id="statNew">0</span>
-                    <span class="stat-label">Новые</span>
-                </div>
-                <div class="stat-card stat-learning">
-                    <span class="stat-number" id="statLearning">0</span>
-                    <span class="stat-label">В обучении</span>
-                </div>
-                <div class="stat-card stat-done">
-                    <span class="stat-number" id="statDone">0</span>
-                    <span class="stat-label">Завершено</span>
-                </div>
-            </div>
-            
             <div class="filter-bar">
                 <select id="adminStatusFilter">
                     <option value="all">Все статусы</option>
@@ -261,27 +213,17 @@
                     <option value="Идет обучение">Идет обучение</option>
                     <option value="Обучение завершено">Обучение завершено</option>
                 </select>
-                <input type="text" id="adminSearch" placeholder="Поиск по курсу или пользователю..." style="flex:2;">
-                <button class="btn btn-sm btn-outline" id="adminClearFilters" style="width:auto;padding:8px 14px;">✕</button>
+                <input type="text" id="adminSearch" placeholder="Поиск по курсу..." style="flex:2;">
             </div>
             <div id="adminRequestsList"></div>
             <div class="pagination" id="adminPagination"></div>
         </div>
 
-        <!-- ============ НАВИГАЦИОННОЕ МЕНЮ (исправлено) ============ -->
+        <!-- ============ НАВИГАЦИОННОЕ МЕНЮ ============ -->
         <div class="bottom-nav">
-            <button class="nav-btn" data-page="page-profile" id="navProfile">
-                <span class="nav-icon">👤</span>
-                <span class="nav-label">Кабинет</span>
-            </button>
-            <button class="nav-btn" data-page="page-request" id="navRequest">
-                <span class="nav-icon">📋</span>
-                <span class="nav-label">Заявка</span>
-            </button>
-            <button class="nav-btn" id="adminNavBtn">
-                <span class="nav-icon">⚙️</span>
-                <span class="nav-label">Админ</span>
-            </button>
+            <button class="nav-link" data-page="page-profile" style="font-size:13px;">👤 Кабинет</button>
+            <button class="nav-link" data-page="page-request" style="font-size:13px;">📋 Заявка</button>
+            <button class="nav-link" id="adminNavBtn" style="font-size:13px;">⚙️ Админ</button>
         </div>
     </div>
 
